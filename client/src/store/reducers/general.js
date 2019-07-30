@@ -1,13 +1,13 @@
-import { ACTION } from "../constants";
+import { GET_API } from "../constants";
 
 const initialState = {
-  data: 0
+  api: null
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ACTION:
-      return { ...state, data: action.payload };
+    case GET_API:
+      return { ...state, api: action.payload };
 
     default:
       return state;
