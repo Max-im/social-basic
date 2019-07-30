@@ -1,0 +1,80 @@
+[
+  {
+    "method": "GET",
+    "path": "/",
+    "access": "public",
+    "description": "return api abilities"
+  },
+  {
+    "method": "GET",
+    "path": "/posts",
+    "access": "public",
+    "description": "return all posts"
+  },
+  {
+    "method": "GET",
+    "path": "/posts/:userId",
+    "access": "public",
+    "description": "return all posts of the particular user"
+  },
+  {
+    "method": "POST",
+    "path": "/posts/:userId",
+    "access": "auth only",
+    "description": "create new post"
+  },
+  {
+    "method": "PUT",
+    "path": "/posts/:postId",
+    "access": "post author only",
+    "description": "update current post data"
+  },
+  {
+    "method": "DELETE",
+    "path": "/posts/:postId",
+    "access": "post author only",
+    "description": "remove current post"
+  },
+  {
+    "method": "POST",
+    "path": "/auth/signup",
+    "access": "public",
+    "description": "register new user"
+  },
+  {
+    "method": "POST",
+    "path": "/auth/login",
+    "access": "public",
+    "description": "login user"
+  },
+  {
+    "method": "GET",
+    "path": "/auth/signout",
+    "access": "public",
+    "description": "logout user"
+  },
+  {
+    "method": "GET",
+    "path": "/user",
+    "access": "public",
+    "description": "return all users"
+  },
+  {
+    "method": "GET",
+    "path": "/user/:userId",
+    "access": "auth only",
+    "description": "return particular user data"
+  },
+  {
+    "method": "PUT",
+    "path": "/user/:userId",
+    "access": "auth only",
+    "description": "update particular user data"
+  },
+  {
+    "method": "DELETE",
+    "path": "/user/:userId",
+    "access": "auth only",
+    "description": "remove current user"
+  }
+]
