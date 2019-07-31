@@ -14,35 +14,57 @@ export class Login extends Component {
   onSubmit(e) {
     e.preventDefault();
     this.props.onLogin(this.state, this.props.history);
-    this.setState({ email: "", password: "" });
   }
 
   static propTypes = {
-    onLogin: PropTypes.func.isRequired
+    onLogin: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired
   };
 
   render() {
+    const { error, loading } = this.props.auth;
     return (
       <div>
         <div className="container">
-          <h3>Login</h3>
+          {loading && <p className="alert alert-info mb-3">Loading...</p>}
+          <h3 className="mt-5 mb-5">Login</h3>
           <form onSubmit={this.onSubmit.bind(this)}>
-            <input
-              type="text"
-              value={this.state.email}
-              name="email"
-              placeholder="email"
-              onChange={this.onChange.bind(this)}
-            />
-            <input
-              type="password"
-              value={this.state.password}
-              placeholder="password"
-              name="password"
-              onChange={this.onChange.bind(this)}
-            />
-            <button type="submit">Login</button>
+            <div className="form-goup">
+              <label className="text-muted">
+                Email
+                <input
+                  type="text"
+                  className="form-control"
+                  value={this.state.email}
+                  name="email"
+                  onChange={this.onChange.bind(this)}
+                />
+              </label>
+              {error.email && (
+                <p className="alert alert-danger mb-3">{error.email}</p>
+              )}
+            </div>
+
+            <div className="form-goup">
+              <label className="text-muted">
+                Password
+                <input
+                  type="password"
+                  className="form-control"
+                  value={this.state.password}
+                  name="password"
+                  onChange={this.onChange.bind(this)}
+                />
+              </label>
+              {error.password && (
+                <p className="alert alert-danger mb-3">{error.password}</p>
+              )}
+            </div>
+            <button type="submit" className="btn btn-raised btn-primary mt-3">
+              Login
+            </button>
           </form>
+
           <Link to="/signup">Register</Link>
         </div>
       </div>
@@ -50,7 +72,11 @@ export class Login extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { onLogin }
 )(withRouter(Login));

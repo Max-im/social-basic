@@ -1,3 +1,7 @@
+ul {
+  list-style: none;
+}
+
 .app {
   display: flex;
   flex-direction: column;
@@ -27,8 +31,9 @@
   }
   &__link {
     color: #777;
+    cursor: pointer;
     &_active {
-      color: green;
+      font-weight: bold;
     }
   }
 }

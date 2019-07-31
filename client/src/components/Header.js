@@ -1,15 +1,17 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
+import { signout } from "../store/actions/auth";
 
 export class Header extends Component {
   static propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    signout: PropTypes.func.isRequired
   };
 
   render() {
-    const { isAuth } = this.props.auth;
+    const { isAuth, user } = this.props.auth;
     return (
       <header className="header">
         <div className="container">
@@ -26,6 +28,7 @@ export class Header extends Component {
             </li>
             <li className="mainMenu__item">
               <NavLink
+                exact
                 className="mainMenu__link"
                 activeClassName="mainMenu__link_active"
                 to="/users"
@@ -65,15 +68,25 @@ export class Header extends Component {
               </>
             )}
             {isAuth && (
-              <li className="mainMenu__item">
-                <NavLink
-                  className="mainMenu__link"
-                  activeClassName="mainMenu__link_active"
-                  to="/logout"
-                >
-                  Logout
-                </NavLink>
-              </li>
+              <>
+                <li className="mainMenu__item">
+                  <NavLink
+                    className="mainMenu__link"
+                    activeClassName="mainMenu__link_active"
+                    to={`/users/${user._id}`}
+                  >
+                    {user.name}
+                  </NavLink>
+                </li>
+                <li className="mainMenu__item">
+                  <p
+                    className="mainMenu__link"
+                    onClick={this.props.signout.bind(this, this.props.history)}
+                  >
+                    Logout
+                  </p>
+                </li>
+              </>
             )}
           </ul>
         </div>
@@ -88,5 +101,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {}
-)(Header);
+  { signout }
+)(withRouter(Header));

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getUsers } from "../store/actions/users";
 
@@ -27,6 +28,7 @@ export class Users extends Component {
                   <p>email - {item.email}</p>
                   <p>created - {item.created}</p>
                   {item.updated && <p>updated - {item.updated}</p>}
+                  <Link to={`/users/${item._id}`}>Profile</Link>
                 </li>
               ))}
             </ul>

@@ -24,7 +24,7 @@ exports.getPosts = (req, res) => {
   Post.find()
     .populate("author", "_id, name")
     .select("_id title body")
-    .then(posts => res.json({ posts }))
+    .then(posts => res.json(posts))
     .catch(error => res.status(400).json({ error }));
 };
 

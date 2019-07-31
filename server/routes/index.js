@@ -1,12 +1,12 @@
 const { Router } = require("express");
-const rootPath = require("./root");
+const api = require("./api");
 const posts = require("./posts");
 const auth = require("./auth");
 const user = require("./user");
 
 const router = Router();
 
-router.use("/", rootPath);
+router.use("/api", api);
 router.use("/posts", posts);
 router.use("/auth", auth);
 router.use("/user", user);
