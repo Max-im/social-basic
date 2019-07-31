@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect, withRouter, Link } from "react-router-dom";
 import { getUserProfile, onDeleteUser } from "../store/actions/users";
+import defaultAvatar from "../assets/avatar.png";
 
 export class Profile extends Component {
   componentDidMount() {
@@ -42,6 +43,11 @@ export class Profile extends Component {
           {user && (
             <div className="row">
               <div className="col-md-6">
+                <img
+                  src={user.avatar ? user.avatar : defaultAvatar}
+                  alt={user.name}
+                  className="profile__img"
+                />
                 <p>Hello {user.name}</p>
                 <p>{user.email}</p>
                 <p>Created {new Date(user.created).toDateString()}</p>

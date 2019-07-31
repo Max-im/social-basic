@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getUsers } from "../store/actions/users";
+import defaultAvatar from "../assets/avatar.png";
 
 export class Users extends Component {
   componentDidMount() {
@@ -24,11 +25,27 @@ export class Users extends Component {
             <ul className="user__list">
               {users.map(item => (
                 <li key={item._id} className="user__item">
-                  <p>name - {item.name}</p>
-                  <p>email - {item.email}</p>
-                  <p>created - {item.created}</p>
-                  {item.updated && <p>updated - {item.updated}</p>}
-                  <Link to={`/users/${item._id}`}>Profile</Link>
+                  <div className="user__body">
+                    <img
+                      src={item.avatar ? item.avatar : defaultAvatar}
+                      alt={item.name}
+                      className="user__img"
+                    />
+                    <div>
+                      <p>name - {item.name}</p>
+                      <p>email - {item.email}</p>
+                      <p>created - {new Date(item.created).toDateString()}</p>
+                      {item.updated && (
+                        <p>updated - {new Date(item.updated).toDateString()}</p>
+                      )}
+                    </div>
+                  </div>
+                  <Link
+                    className="btn btn-raised btn-primary"
+                    to={`/users/${item._id}`}
+                  >
+                    Profile
+                  </Link>
                 </li>
               ))}
             </ul>
