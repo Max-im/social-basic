@@ -80,3 +80,22 @@ ul {
     margin: 15px 0;
   }
 }
+
+.follower {
+  &__list {
+    padding: 5px;
+    width: 500px;
+
+    display: flex;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+  }
+  &__photo {
+    width: 25px;
+    height: 25px;
+  }
+  &__name {
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+  }
+}

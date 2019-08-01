@@ -24,11 +24,11 @@ export const onDeleteUser = (userId, history) => dispatch => {
 };
 
 export const onUpdateProfile = (userId, userData, h, setState) => dispatch => {
+  const options = { headers: { "Content-Type": "multipart/form-data" } };
   const formData = new FormData();
   Object.keys(userData)
     .filter(key => userData[key])
     .forEach(key => formData.set(key, userData[key]));
-  const options = { headers: { "Content-Type": "multipart/form-data" } };
 
   axios
     .put(`/user/${userId}`, formData, options)
@@ -47,4 +47,18 @@ export const onUpdateProfile = (userId, userData, h, setState) => dispatch => {
       h.push(`/users/${userId}`);
     })
     .catch(err => setState({ error: "Error updating data, try again" }));
+};
+
+export const onFollow = (userId, followId, setState) => dispatch => {
+  axios
+    .put(`/user/follow/${userId}`, { followId })
+    .then(() => dispatch(getUserProfile(followId)))
+    .catch(error => setState({ error }));
+};
+
+export const unFollow = (userId, unfollowId, setState) => dispatch => {
+  axios
+    .put(`/user/unfollow/${userId}`, { unfollowId })
+    .then(() => dispatch(getUserProfile(unfollowId)))
+    .catch(error => setState({ error }));
 };

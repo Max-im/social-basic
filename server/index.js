@@ -19,7 +19,7 @@ if (!isProd) {
 }
 
 // connect db
-const dbOptions = { useNewUrlParser: true };
+const dbOptions = { useNewUrlParser: true, useFindAndModify: false };
 mongoose
   .connect(process.env.DB_URL, dbOptions)
   .then(() => console.log("db connected"))

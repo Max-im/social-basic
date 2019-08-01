@@ -1,14 +1,18 @@
-const _ = require("lodash");
 const formidable = require("formidable");
+const _ = require("lodash");
 const fs = require("fs");
 const User = require("../models/User");
 
 exports.attachUserToRequest = (req, res, next, id) => {
-  User.findOne({ _id: id }).exec((err, user) => {
-    if (err || !user) return res.status(400).json({ error: "User not found" });
-    req.profile = user;
-    next();
-  });
+  User.findOne({ _id: id })
+    .populate("following", "_id name customPhoto")
+    .populate("followers", "_id name customPhoto")
+    .then(user => {
+      if (!user) return res.status(400).json({ error: "User not found" });
+      req.profile = user;
+      next();
+    })
+    .catch(error => res.status(400).json({ error }));
 };
 
 exports.hasAuthorization = (req, res, next) => {
@@ -38,16 +42,10 @@ exports.userPhoto = (req, res) => {
 };
 
 exports.getSingleUser = (req, res) => {
-  const {
-    _id,
-    email,
-    name,
-    created,
-    updated,
-    customPhoto,
-    about
-  } = req.profile;
-  return res.json({ _id, email, name, created, updated, customPhoto, about });
+  const { profile } = req;
+  profile.password_hashed = undefined;
+  profile.salt = undefined;
+  return res.json(profile);
 };
 
 exports.updateUser = (req, res) => {
@@ -79,4 +77,42 @@ exports.deleteUser = (req, res) => {
     const { _id, email, name, created, updated } = user;
     res.json({ _id, email, name, created, updated });
   });
+};
+
+exports.addFollowing = (req, res, next) => {
+  User.findOneAndUpdate(
+    { _id: req.profile._id },
+    { $push: { following: req.body.followId } }
+  )
+    .then(() => next())
+    .catch(error => res.status(400).json(error));
+};
+
+exports.addFollower = (req, res) => {
+  User.findOneAndUpdate(
+    { _id: req.body.followId },
+    { $push: { followers: req.profile._id } },
+    { new: true }
+  )
+    .then(() => res.end())
+    .catch(error => res.status(400).json(error));
+};
+
+exports.removeFollowing = (req, res, next) => {
+  User.findOneAndUpdate(
+    { _id: req.profile._id },
+    { $pull: { following: req.body.unfollowId } }
+  )
+    .then(() => next())
+    .catch(error => res.status(400).json(error));
+};
+
+exports.removeFollower = (req, res) => {
+  User.findOneAndUpdate(
+    { _id: req.body.unfollowId },
+    { $pull: { followers: req.profile._id } },
+    { new: true }
+  )
+    .then(() => res.end())
+    .catch(error => res.status(400).json(error));
 };

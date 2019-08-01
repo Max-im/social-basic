@@ -11,7 +11,9 @@ const userSchema = new Schema({
   photo: { data: Buffer, contentType: String },
   about: { type: String, trim: true },
   created: { type: Date, default: Date.now },
-  updated: { type: Date }
+  updated: { type: Date },
+  following: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  followers: [{ type: Schema.Types.ObjectId, ref: "User" }]
 });
 
 // virtual field

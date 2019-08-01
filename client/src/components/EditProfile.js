@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { getUserProfile, onUpdateProfile } from "../store/actions/users";
 import { editProfileValidation } from "../helpers/validation";
+import defaultAvatar from "../assets/avatar.png";
 
 export class EditProfile extends Component {
   state = { name: "", email: "", photo: null, about: "", error: null };
@@ -71,6 +72,11 @@ export class EditProfile extends Component {
             {this.state.error && (
               <p className="alert alert-danger">{this.state.error}</p>
             )}
+            <img
+              src={user.customPhoto ? `/user/photo/${user._id}` : defaultAvatar}
+              alt={user.name}
+              className="profile__img img-thumbnail"
+            />
             <form onSubmit={this.onSubmit.bind(this)}>
               <div className="form-goup">
                 <label className="text-muted">

@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { Redirect, withRouter, Link } from "react-router-dom";
 import { getUserProfile, onDeleteUser } from "../store/actions/users";
 import defaultAvatar from "../assets/avatar.png";
+import FollowProfile from "./FollowProfile";
+import FollowersList from "./FollowersList";
 
 export class Profile extends Component {
   componentDidMount() {
@@ -74,6 +76,8 @@ export class Profile extends Component {
                   </p>
                 </div>
               )}
+              {authUser._id !== user._id && <FollowProfile />}
+              <FollowersList />
             </div>
           )}
         </div>
