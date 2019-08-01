@@ -1,4 +1,6 @@
 const _ = require("lodash");
+const formidable = require("formidable");
+const fs = require("fs");
 const User = require("../models/User");
 
 exports.attachUserToRequest = (req, res, next, id) => {
@@ -22,24 +24,51 @@ exports.hasAuthorization = (req, res, next) => {
 
 exports.getAllUsers = (req, res) => {
   User.find()
-    .select("_id name email created updated")
+    .select("_id name email created updated customPhoto")
     .then(users => res.json(users))
     .catch(error => res.status(400).json(error));
 };
 
+exports.userPhoto = (req, res) => {
+  if (req.profile.photo.data) {
+    res.set(("Content-Type", req.profile.photo.contentType));
+    return res.send(req.profile.photo.data);
+  }
+  next();
+};
+
 exports.getSingleUser = (req, res) => {
-  const { _id, email, name, created, updated } = req.profile;
-  return res.json({ _id, email, name, created, updated });
+  const {
+    _id,
+    email,
+    name,
+    created,
+    updated,
+    customPhoto,
+    about
+  } = req.profile;
+  return res.json({ _id, email, name, created, updated, customPhoto, about });
 };
 
 exports.updateUser = (req, res) => {
-  const { profile } = req;
-  const updatedUser = _.extend(profile, req.body);
-  updatedUser.updated = new Date();
-  const { _id, email, name, created, updated } = updatedUser;
-  updatedUser.save(err => {
-    if (err) return res.status(400).json(err);
-    return res.json({ _id, email, name, created, updated });
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
+  form.parse(req, (error, fields, files) => {
+    if (error) return res.status(400).json(error);
+    const { profile } = req;
+    const user = _.extend(profile, fields);
+
+    user.updated = Date.now();
+    if (files.photo) {
+      user.photo.data = fs.readFileSync(files.photo.path);
+      user.photo.contentType = files.photo.type;
+      user.customPhoto = true;
+    }
+
+    user
+      .save()
+      .then(() => res.end())
+      .catch(err => res.status(400).json({ error: err }));
   });
 };
 

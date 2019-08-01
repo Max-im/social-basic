@@ -44,14 +44,19 @@ export class Profile extends Component {
             <div className="row">
               <div className="col-md-6">
                 <img
-                  src={user.avatar ? user.avatar : defaultAvatar}
+                  src={
+                    user.customPhoto ? `/user/photo/${user._id}` : defaultAvatar
+                  }
                   alt={user.name}
-                  className="profile__img"
+                  className="profile__img img-thumbnail"
                 />
                 <p>Hello {user.name}</p>
                 <p>{user.email}</p>
+                <p>{user.about}</p>
                 <p>Created {new Date(user.created).toDateString()}</p>
-                {user.updated && <p>{user.updated}</p>}
+                {user.updated && (
+                  <p>Updated {new Date(user.updated).toDateString()}</p>
+                )}
               </div>
               {authUser._id === user._id && (
                 <div className="col-md-6">

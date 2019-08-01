@@ -9,6 +9,7 @@ import Users from "./Users";
 import Posts from "./Posts";
 import Profile from "./Profile";
 import EditProfile from "./EditProfile";
+import PrivateRoute from "./Permission/PrivateRoute";
 
 function App() {
   return (
@@ -16,13 +17,15 @@ function App() {
       <div className="app">
         <Header />
         <main className="main">
-          <Route path="/" exact component={Home} />
-          <Route path="/users" exact component={Users} />
-          <Route path="/users/:userId" exact component={Profile} />
-          <Route path="/users/edit/:userId" component={EditProfile} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/signup" exact component={Register} />
-          <Route path="/posts" exact component={Posts} />
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/users" exact component={Users} />
+            <Route path="/users/:userId" exact component={Profile} />
+            <PrivateRoute path="/users/edit/:userId" component={EditProfile} />
+            <Route path="/login" exact component={Login} />
+            <Route path="/signup" exact component={Register} />
+            <Route path="/posts" exact component={Posts} />
+          </Switch>
         </main>
         <Footer />
       </div>

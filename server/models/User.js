@@ -7,6 +7,9 @@ const userSchema = new Schema({
   email: { type: String, trim: true, required: true },
   password_hashed: { type: String },
   salt: { type: String },
+  customPhoto: { type: Boolean, default: false },
+  photo: { data: Buffer, contentType: String },
+  about: { type: String, trim: true },
   created: { type: Date, default: Date.now },
   updated: { type: Date }
 });

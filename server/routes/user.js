@@ -2,6 +2,7 @@ const { Router } = require("express");
 const {
   getAllUsers,
   getSingleUser,
+  userPhoto,
   updateUser,
   deleteUser
 } = require("../controllers/user");
@@ -12,6 +13,7 @@ const router = Router();
 
 router.get("/", getAllUsers);
 router.get("/:userId", isAuth, getSingleUser);
+router.get("/photo/:userId", userPhoto);
 router.put("/:userId", isAuth, updateUser);
 router.delete("/:userId", isAuth, deleteUser);
 

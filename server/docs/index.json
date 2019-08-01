@@ -66,6 +66,12 @@
     "description": "return particular user data"
   },
   {
+    "method": "GET",
+    "path": "/user/photo/:userId",
+    "access": "auth only",
+    "description": "return particular user photo"
+  },
+  {
     "method": "PUT",
     "path": "/user/:userId",
     "access": "auth only",

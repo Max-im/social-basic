@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Redirect, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { getUserProfile, onUpdateProfile } from "../store/actions/users";
+import { editProfileValidation } from "../helpers/validation";
 
 export class EditProfile extends Component {
-  state = { name: "", email: "" };
+  state = { name: "", email: "", photo: null, about: "", error: null };
 
   componentDidMount() {
     const { userId } = this.props.match.params;
     if (!this.props.users.user) this.props.getUserProfile(userId);
     else {
-      const { name, email } = this.props.users.user;
-      this.setState({ name, email });
+      const { name, email, about } = this.props.users.user;
+      this.setState({ name, email, about });
     }
   }
 
@@ -20,9 +21,13 @@ export class EditProfile extends Component {
     const { user } = this.props.users;
     const { user: prevUser } = prev.users;
     if (!prevUser && user) {
-      const { name, email } = user;
-      this.setState({ name, email });
+      const { name, email, about } = user;
+      this.setState({ name, email, about });
     }
+  }
+
+  onUploadPhoto(e) {
+    this.setState({ photo: e.target.files[0] });
   }
 
   onChange(e) {
@@ -33,7 +38,17 @@ export class EditProfile extends Component {
     e.preventDefault();
     const { userId } = this.props.match.params;
     const { history } = this.props;
-    this.props.onUpdateProfile(userId, this.state, history);
+    const { email, name, photo, about } = this.state;
+
+    const isErr = editProfileValidation(this.setState.bind(this), this.state);
+    if (isErr) return;
+
+    this.props.onUpdateProfile(
+      userId,
+      { email, name, photo, about },
+      history,
+      this.setState.bind(this)
+    );
   }
 
   static propTypes = {
@@ -49,12 +64,25 @@ export class EditProfile extends Component {
 
     return (
       <div>
-        {user && user._id !== authUser._id && <Redirect to="/" />}
-
         {(user && user._id) === authUser._id && (
           <div className="container">
             <h3 className="mt-5 mb-5">Edit Profile</h3>
+
+            {this.state.error && (
+              <p className="alert alert-danger">{this.state.error}</p>
+            )}
             <form onSubmit={this.onSubmit.bind(this)}>
+              <div className="form-goup">
+                <label className="text-muted">
+                  Photo
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="form-control"
+                    onChange={this.onUploadPhoto.bind(this)}
+                  />
+                </label>
+              </div>
               <div className="form-goup">
                 <label className="text-muted">
                   Name
@@ -63,6 +91,17 @@ export class EditProfile extends Component {
                     name="name"
                     className="form-control"
                     value={this.state.name}
+                    onChange={this.onChange.bind(this)}
+                  />
+                </label>
+              </div>
+              <div className="form-goup">
+                <label className="text-muted">
+                  About
+                  <textarea
+                    name="about"
+                    className="form-control"
+                    value={this.state.about}
                     onChange={this.onChange.bind(this)}
                   />
                 </label>

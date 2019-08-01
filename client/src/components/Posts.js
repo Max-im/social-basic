@@ -6,7 +6,7 @@ import { getPosts } from "../store/actions/posts";
 
 export class Posts extends Component {
   componentDidMount() {
-    if (!this.props.posts.posts) this.props.getPosts();
+    this.props.getPosts();
   }
 
   static propTypes = {
