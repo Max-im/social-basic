@@ -18,7 +18,7 @@ export class FollowersList extends Component {
             <p>Followers - {user.followers.length}</p>
             <ul className="follower__list">
               {user.followers.map(item => (
-                <li key={item._id}>
+                <li key={item._id} className="follower__item">
                   <Link to={`/users/${item._id}`}>
                     <img
                       className="follower__photo"
@@ -42,7 +42,7 @@ export class FollowersList extends Component {
             <p>Followers - {user.following.length}</p>
             <ul className="follower__list">
               {user.following.map(item => (
-                <li key={item._id}>
+                <li key={item._id} className="follower__item">
                   <Link to={`/users/${item._id}`}>
                     <img
                       className="follower__photo"

@@ -85,9 +85,17 @@ ul {
   &__list {
     padding: 5px;
     width: 500px;
-
     display: flex;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+  }
+  &__item {
+    position: relative;
+    padding: 0 5px;
+    &:hover {
+      .follower__name {
+        display: block;
+      }
+    }
   }
   &__photo {
     width: 25px;
@@ -97,5 +105,11 @@ ul {
     font-size: 12px;
     margin: 0;
     padding: 0;
+    display: none;
+    padding: 2px 5px;
+    top: 30px;
+    position: absolute;
+    background: #fff;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
   }
 }
