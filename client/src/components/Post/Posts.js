@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { getPosts } from "../store/actions/posts";
+import { getPosts } from "../../store/actions/posts";
+import PostItem from "./PostItem";
 
 export class Posts extends Component {
   componentDidMount() {
@@ -23,15 +23,7 @@ export class Posts extends Component {
           {posts && (
             <ul className="post__list">
               {posts.map(item => (
-                <li key={item._id} className="post__item">
-                  <h5>{item.title}</h5>
-                  <p>{item.body}</p>
-                  {item.author && (
-                    <Link to={`/users/${item.author._id}`}>
-                      author - {item.author.name}
-                    </Link>
-                  )}
-                </li>
+                <PostItem key={item._id} item={item} />
               ))}
             </ul>
           )}

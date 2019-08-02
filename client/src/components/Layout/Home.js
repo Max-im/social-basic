@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getApiData } from "../store/actions/home";
+import { getApiData } from "../../store/actions/home";
+import Posts from "../Post/Posts";
 
 export class Home extends Component {
   componentDidMount() {
@@ -42,6 +43,7 @@ export class Home extends Component {
             </tbody>
           </table>
         )}
+        <Posts />
       </div>
     );
   }

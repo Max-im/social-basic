@@ -113,3 +113,40 @@ ul {
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
   }
 }
+
+.postItem {
+  flex: 0 0 30%;
+  padding: 15px;
+  box-sizing: border-box;
+  &__content {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+  }
+
+  &__img {
+    width: 100%;
+    height: 150px;
+  }
+  &__wrapper {
+    padding: 15px;
+  }
+  &__title {
+    font-size: 22px;
+  }
+  &__author {
+    display: block;
+    text-align: right;
+  }
+}
+
+.userPosts {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.singlePost {
+  &__img {
+    width: 100%;
+  }
+}

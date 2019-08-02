@@ -2,6 +2,8 @@ const { Router } = require("express");
 const {
   getPosts,
   getUserPosts,
+  getSinglePost,
+  postPhoto,
   createPost,
   updatePost,
   deletePost,
@@ -16,7 +18,9 @@ const { attachUserToRequest } = require("../controllers/user");
 const router = Router();
 
 router.get("/", getPosts);
-router.get("/:userId", getUserPosts);
+router.get("/by/:userId", getUserPosts);
+router.get("/:postId", getSinglePost);
+router.get("/photo/:postId", postPhoto);
 router.post("/:userId", isAuth, createPost, createPostValidation);
 router.put("/:postId", isAuth, isAuthor, updatePost);
 router.delete("/:postId", isAuth, isAuthor, deletePost);

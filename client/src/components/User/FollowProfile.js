@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { onFollow, unFollow } from "../store/actions/users";
+import { onFollow, unFollow } from "../../store/actions/users";
 
 export class FollowProfile extends Component {
   state = { error: null };

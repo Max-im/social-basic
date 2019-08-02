@@ -10,3 +10,16 @@ export const editProfileValidation = (setState, state) => {
   if (errorArr.length > 0) setState({ error: errorArr.join(", ") });
   return errorArr.length > 0;
 };
+
+export const createPostValidation = (setState, state) => {
+  const errorArr = [];
+  const { title, body, photo } = state;
+  setState({ error: null });
+
+  if (title.trim().length === 0) errorArr.push("title field cant be empty");
+  if (body.trim().length === 0) errorArr.push("body field cant be empty");
+  if (photo && photo.size > 1000000)
+    errorArr.push("photo must be less then 1MB");
+  if (errorArr.length > 0) setState({ error: errorArr.join(", ") });
+  return errorArr.length > 0;
+};

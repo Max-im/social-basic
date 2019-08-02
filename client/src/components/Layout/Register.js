@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-import { onLogin } from "../store/actions/auth";
+import { onRegister } from "../../store/actions/auth";
 
 export class Login extends Component {
-  state = { email: "", password: "" };
+  state = { name: "", password: "", email: "" };
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -13,11 +13,12 @@ export class Login extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    this.props.onLogin(this.state, this.props.history);
+    this.props.onRegister(this.state, this.props.history);
+    this.setState({ email: "", password: "", name: "" });
   }
 
   static propTypes = {
-    onLogin: PropTypes.func.isRequired,
+    onRegister: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
   };
 
@@ -27,8 +28,23 @@ export class Login extends Component {
       <div>
         <div className="container">
           {loading && <p className="alert alert-info mb-3">Loading...</p>}
-          <h3 className="mt-5 mb-5">Login</h3>
+          <h3 className="mt-5 mb-5">Register</h3>
           <form onSubmit={this.onSubmit.bind(this)}>
+            <div className="form-goup">
+              <label className="text-muted">
+                Name
+                <input
+                  type="text"
+                  className="form-control"
+                  value={this.state.name}
+                  name="name"
+                  onChange={this.onChange.bind(this)}
+                />
+              </label>
+              {error.name && (
+                <p className="alert alert-danger mb-3">{error.name}</p>
+              )}
+            </div>
             <div className="form-goup">
               <label className="text-muted">
                 Email
@@ -44,7 +60,6 @@ export class Login extends Component {
                 <p className="alert alert-danger mb-3">{error.email}</p>
               )}
             </div>
-
             <div className="form-goup">
               <label className="text-muted">
                 Password
@@ -61,11 +76,11 @@ export class Login extends Component {
               )}
             </div>
             <button type="submit" className="btn btn-raised btn-primary mt-3">
-              Login
+              Register
             </button>
           </form>
 
-          <Link to="/signup">Register</Link>
+          <Link to="/login">Login</Link>
         </div>
       </div>
     );
@@ -78,5 +93,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { onLogin }
+  { onRegister }
 )(withRouter(Login));

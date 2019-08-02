@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import defaultAvatar from "../assets/avatar.png";
+import defaultAvatar from "../../assets/avatar.png";
 
 export class FollowersList extends Component {
   static propTypes = {

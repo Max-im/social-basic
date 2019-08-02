@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getUsers } from "../store/actions/users";
+import { getUsers } from "../../store/actions/users";
 import UserCard from "./UserCard";
 
 export class Users extends Component {

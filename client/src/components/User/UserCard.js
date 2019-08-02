@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import defaultAvatar from "../assets/avatar.png";
+import defaultAvatar from "../../assets/avatar.png";
 
 export default function UserCard({ item }) {
   return (

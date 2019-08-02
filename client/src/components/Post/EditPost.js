@@ -2,28 +2,28 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { getUserProfile, onUpdateProfile } from "../store/actions/users";
-import { editProfileValidation } from "../helpers/validation";
-import defaultAvatar from "../assets/avatar.png";
+import { createPostValidation } from "../../helpers/validation";
+import defaultImg from "../../assets/post.png";
+import { getSinglePost, updatePost } from "../../store/actions/posts";
 
-export class EditProfile extends Component {
-  state = { name: "", email: "", photo: null, about: "", error: null };
+export class EditPost extends Component {
+  state = { title: "", body: "", photo: null, error: null };
 
   componentDidMount() {
-    const { userId } = this.props.match.params;
-    if (!this.props.users.user) this.props.getUserProfile(userId);
+    const { postId } = this.props.match.params;
+    if (!this.props.posts.post) this.props.getSinglePost(postId);
     else {
-      const { name, email, about } = this.props.users.user;
-      this.setState({ name, email, about });
+      const { title, body } = this.props.posts.post;
+      this.setState({ title, body });
     }
   }
 
   componentDidUpdate(prev) {
-    const { user } = this.props.users;
-    const { user: prevUser } = prev.users;
-    if (!prevUser && user) {
-      const { name, email, about } = user;
-      this.setState({ name, email, about });
+    const { post } = this.props.posts;
+    const { post: prevPost } = prev.posts;
+    if (!prevPost && post) {
+      const { title, body } = this.props.posts.post;
+      this.setState({ title, body });
     }
   }
 
@@ -37,46 +37,44 @@ export class EditProfile extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    const { userId } = this.props.match.params;
+    const { postId } = this.props.match.params;
     const { history } = this.props;
-    const { email, name, photo, about } = this.state;
+    const { photo, body, title } = this.state;
+    const setState = this.setState.bind(this);
 
-    const isErr = editProfileValidation(this.setState.bind(this), this.state);
+    const isErr = createPostValidation(setState, this.state);
     if (isErr) return;
 
-    this.props.onUpdateProfile(
-      userId,
-      { email, name, photo, about },
-      history,
-      this.setState.bind(this)
-    );
+    this.props.updatePost(postId, { photo, body, title }, history, setState);
   }
 
   static propTypes = {
     auth: PropTypes.object.isRequired,
-    users: PropTypes.object.isRequired,
-    getUserProfile: PropTypes.func.isRequired,
-    onUpdateProfile: PropTypes.func.isRequired
+    posts: PropTypes.object.isRequired,
+    getSinglePost: PropTypes.func.isRequired,
+    updatePost: PropTypes.func.isRequired
   };
 
   render() {
-    const { user } = this.props.users;
+    const { post } = this.props.posts;
     const { user: authUser } = this.props.auth;
 
     return (
       <div>
-        {(user && user._id) === authUser._id && (
+        {post && post.author._id === authUser._id && (
           <div className="container">
-            <h3 className="mt-5 mb-5">Edit Profile</h3>
+            <h3 className="mt-5 mb-5">Edit Post</h3>
 
             {this.state.error && (
               <p className="alert alert-danger">{this.state.error}</p>
             )}
+
             <img
-              src={user.customPhoto ? `/user/photo/${user._id}` : defaultAvatar}
-              alt={user.name}
+              src={post.customPhoto ? `/posts/photo/${post._id}` : defaultImg}
+              alt="post"
               className="profile__img img-thumbnail"
             />
+
             <form onSubmit={this.onSubmit.bind(this)}>
               <div className="form-goup">
                 <label className="text-muted">
@@ -89,41 +87,32 @@ export class EditProfile extends Component {
                   />
                 </label>
               </div>
+
               <div className="form-goup">
                 <label className="text-muted">
-                  Name
+                  Title
                   <input
                     type="text"
-                    name="name"
+                    name="title"
                     className="form-control"
-                    value={this.state.name}
+                    value={this.state.title}
                     onChange={this.onChange.bind(this)}
                   />
                 </label>
               </div>
+
               <div className="form-goup">
                 <label className="text-muted">
-                  About
+                  Body
                   <textarea
-                    name="about"
+                    name="body"
                     className="form-control"
-                    value={this.state.about}
+                    value={this.state.body}
                     onChange={this.onChange.bind(this)}
                   />
                 </label>
               </div>
-              <div className="form-goup">
-                <label className="text-muted">
-                  Email
-                  <input
-                    type="text"
-                    name="email"
-                    className="form-control"
-                    value={this.state.email}
-                    onChange={this.onChange.bind(this)}
-                  />
-                </label>
-              </div>
+
               <button type="submit" className="btn btn-raised btn-primary mt-3">
                 Edit
               </button>
@@ -137,10 +126,10 @@ export class EditProfile extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  users: state.users
+  posts: state.posts
 });
 
 export default connect(
   mapStateToProps,
-  { getUserProfile, onUpdateProfile }
-)(withRouter(EditProfile));
+  { getSinglePost, updatePost }
+)(withRouter(EditPost));

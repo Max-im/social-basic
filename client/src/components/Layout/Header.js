@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { NavLink, withRouter } from "react-router-dom";
-import { signout } from "../store/actions/auth";
+import { signout } from "../../store/actions/auth";
 
 export class Header extends Component {
   static propTypes = {
@@ -36,15 +36,7 @@ export class Header extends Component {
                 Users
               </NavLink>
             </li>
-            <li className="mainMenu__item">
-              <NavLink
-                className="mainMenu__link"
-                activeClassName="mainMenu__link_active"
-                to="/posts"
-              >
-                Posts
-              </NavLink>
-            </li>
+
             {!isAuth && (
               <>
                 <li className="mainMenu__item">
