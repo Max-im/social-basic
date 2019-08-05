@@ -3,9 +3,10 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { addComment } from "../../store/actions/posts";
+import { createCommentValidation } from "../../helpers/validation";
 
 export class AddComment extends Component {
-  state = { text: "" };
+  state = { text: "", error: null };
 
   onChange(e) {
     this.setState({ text: e.target.value });
@@ -15,6 +16,8 @@ export class AddComment extends Component {
     e.preventDefault();
     const { postId } = this.props.match.params;
     const { _id: userId } = this.props.auth.user;
+    const isErr = createCommentValidation(this.setState.bind(this), this.state);
+    if (isErr) return;
     this.props.addComment(postId, userId, this.state.text);
     this.setState({ text: "" });
   }
@@ -31,6 +34,9 @@ export class AddComment extends Component {
         {isAuth && (
           <div className="col-md-12">
             <h3 className="mt-5 mb-5">Add Comment</h3>
+            {this.state.error && (
+              <p className="alert alert-danger">{this.state.error}</p>
+            )}
             <form onSubmit={this.onSubmit.bind(this)}>
               <div>
                 <textarea

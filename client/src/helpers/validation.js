@@ -23,3 +23,14 @@ export const createPostValidation = (setState, state) => {
   if (errorArr.length > 0) setState({ error: errorArr.join(", ") });
   return errorArr.length > 0;
 };
+
+export const createCommentValidation = (setState, state) => {
+  const errorArr = [];
+  const { text } = state;
+  setState({ error: null });
+
+  if (text.trim().length === 0) errorArr.push("text field cant be empty");
+
+  if (errorArr.length > 0) setState({ error: errorArr.join(", ") });
+  return errorArr.length > 0;
+};
