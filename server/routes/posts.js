@@ -10,8 +10,11 @@ const {
   unlike,
   togglelike,
   toggleunlike,
+  addComment,
+  deleteComment,
   deletePost,
   isAuthor,
+  isCommentAuthor,
   attachPostById
 } = require("../controllers/posts");
 const { isAuth } = require("../controllers/auth");
@@ -26,6 +29,13 @@ router.get("/by/:userId", getUserPosts);
 router.get("/:postId", getSinglePost);
 router.get("/photo/:postId", postPhoto);
 router.post("/:userId", isAuth, createPost, createPostValidation);
+router.post("/comment/:postId", isAuth, addComment);
+router.delete(
+  "/comment/:postId/:commentId",
+  isAuth,
+  isCommentAuthor,
+  deleteComment
+);
 router.put("/like/:postId", isAuth, like);
 router.put("/togglelike/:postId", isAuth, togglelike);
 router.put("/unlike/:postId", isAuth, unlike);

@@ -3,7 +3,8 @@ import {
   GET_POSTS,
   GET_USER_POSTS,
   GET_POST,
-  CHANGE_LIKES
+  CHANGE_LIKES,
+  CHANGE_COMMENTS
 } from "../constants";
 
 export const getPosts = () => dispatch => {
@@ -98,5 +99,19 @@ export const toggleUnlike = (postId, userId) => dispatch => {
   axios
     .put(`/posts/toggleunlike/${postId}`, { userId })
     .then(({ data }) => dispatch({ type: CHANGE_LIKES, payload: data }))
+    .catch(err => console.log(err));
+};
+
+export const addComment = (postId, userId, text) => dispatch => {
+  axios
+    .post(`/posts/comment/${postId}`, { userId, text })
+    .then(({ data }) => dispatch({ type: CHANGE_COMMENTS, payload: data }))
+    .catch(err => console.log(err));
+};
+
+export const onDeleteComment = (commentId, postId) => dispatch => {
+  axios
+    .delete(`/posts/comment/${postId}/${commentId}`)
+    .then(({ data }) => dispatch({ type: CHANGE_COMMENTS, payload: data }))
     .catch(err => console.log(err));
 };

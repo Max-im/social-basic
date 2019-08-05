@@ -5,6 +5,8 @@ import { Link, withRouter } from "react-router-dom";
 import { getSinglePost, onDeletePost } from "../../store/actions/posts";
 import defaultImg from "../../assets/post.png";
 import PostLikes from "./PostLikes";
+import AddComment from "./AddComment";
+import CommentsList from "./CommentsList";
 
 export class SinglePost extends Component {
   componentDidMount() {
@@ -72,11 +74,10 @@ export class SinglePost extends Component {
                 )}
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-12">
-                <PostLikes />
-              </div>
-            </div>
+
+            <PostLikes />
+            <AddComment />
+            <CommentsList />
           </div>
         )}
       </div>

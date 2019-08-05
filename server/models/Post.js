@@ -8,6 +8,13 @@ const postSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: "User" },
   likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   unlikes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  comments: [
+    {
+      author: { type: Schema.Types.ObjectId, ref: "User" },
+      text: { type: String, required: true },
+      date: { type: Date, default: Date.now }
+    }
+  ],
   created: { type: Date, default: Date.now }
 });
 

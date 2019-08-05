@@ -20,6 +20,23 @@ exports.isAuthor = (req, res, next) => {
   return next();
 };
 
+exports.isCommentAuthor = (req, res, next) => {
+  Post.findOne({ _id: req.post._id })
+    .select("comments")
+    .then(data => {
+      const { commentId } = req.params;
+      const theComment = data.comments.find(item => item._id == commentId);
+      if (!theComment) {
+        return res.status(403).json({ error: "Permission denied" });
+      }
+      if (theComment.author != req.auth._id) {
+        return res.status(403).json({ error: "Permission denied" });
+      }
+      return next();
+    })
+    .catch(() => res.status(403).json({ error: "Permission denied" }));
+};
+
 exports.postPhoto = (req, res, next) => {
   if (req.post.photo.data) {
     res.set(("Content-Type", req.post.photo.contentType));
@@ -30,8 +47,11 @@ exports.postPhoto = (req, res, next) => {
 
 exports.getSinglePost = (req, res) => {
   Post.findOne({ _id: req.post._id })
-    .select("_id title body customPhoto author created updated likes unlikes")
+    .select(
+      "_id title body customPhoto author created updated likes unlikes comments"
+    )
     .populate("author")
+    .populate("comments.author", "_id name customPhoto")
     .then(post => res.json(post))
     .catch(error => res.status(400).json(error));
 };
@@ -96,7 +116,6 @@ exports.updatePost = (req, res) => {
       upPost.photo.contentType = files.photo.type;
       upPost.customPhoto = true;
     }
-
     upPost
       .save()
       .then(() => res.end())
@@ -141,6 +160,29 @@ exports.toggleunlike = (req, res) => {
     { new: true }
   )
     .then(post => res.json({ likes: post.likes, unlikes: post.unlikes }))
+    .catch(err => res.status(400).json(err));
+};
+
+exports.addComment = (req, res) => {
+  const { userId: author, text } = req.body;
+  Post.findOneAndUpdate(
+    { _id: req.post._id },
+    { $push: { comments: { author, text } } },
+    { new: true }
+  )
+    .then(post => res.json(post.comments))
+    .catch(err => res.status(400).json(err));
+};
+
+exports.deleteComment = (req, res) => {
+  const { commentId } = req.params;
+  Post.findOneAndUpdate(
+    { _id: req.post._id },
+    { $pull: { comments: { _id: commentId } } },
+    { new: true }
+  )
+    .populate("comments.author", "_id name customPhoto")
+    .then(post => res.json(post.comments))
     .catch(err => res.status(400).json(err));
 };
 

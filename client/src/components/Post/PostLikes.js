@@ -37,9 +37,9 @@ export class PostLikes extends Component {
     const { isAuth } = this.props.auth;
     const { post } = this.props.posts;
     return (
-      <div>
+      <div className="row">
         {isAuth && (
-          <>
+          <div className="col-md-12">
             <h3 className="mb-5 mt-5">Likes</h3>
             <div className="row">
               <div className="col-md-2">
@@ -61,7 +61,7 @@ export class PostLikes extends Component {
                 </button>
               </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     );
