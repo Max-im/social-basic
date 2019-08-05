@@ -1,5 +1,10 @@
 import axios from "axios";
-import { GET_POSTS, GET_USER_POSTS, GET_POST } from "../constants";
+import {
+  GET_POSTS,
+  GET_USER_POSTS,
+  GET_POST,
+  CHANGE_LIKES
+} from "../constants";
 
 export const getPosts = () => dispatch => {
   axios
@@ -59,4 +64,39 @@ export const updatePost = (postId, postData, history, setState) => dispatch => {
       else console.log(err);
       setState({ error: "Error updating post" });
     });
+};
+
+export const onDeletePost = (id, history) => dispatch => {
+  axios
+    .delete(`/posts/${id}`)
+    .then(() => history.push("/"))
+    .catch(err => console.log(err));
+};
+
+export const onLike = (postId, userId) => dispatch => {
+  axios
+    .put(`/posts/like/${postId}`, { userId })
+    .then(({ data }) => dispatch({ type: CHANGE_LIKES, payload: data }))
+    .catch(err => console.log(err));
+};
+
+export const onUnlike = (postId, userId) => dispatch => {
+  axios
+    .put(`/posts/unlike/${postId}`, { userId })
+    .then(({ data }) => dispatch({ type: CHANGE_LIKES, payload: data }))
+    .catch(err => console.log(err));
+};
+
+export const toggleLike = (postId, userId) => dispatch => {
+  axios
+    .put(`/posts/togglelike/${postId}`, { userId })
+    .then(({ data }) => dispatch({ type: CHANGE_LIKES, payload: data }))
+    .catch(err => console.log(err));
+};
+
+export const toggleUnlike = (postId, userId) => dispatch => {
+  axios
+    .put(`/posts/toggleunlike/${postId}`, { userId })
+    .then(({ data }) => dispatch({ type: CHANGE_LIKES, payload: data }))
+    .catch(err => console.log(err));
 };

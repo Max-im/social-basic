@@ -6,6 +6,10 @@ const {
   postPhoto,
   createPost,
   updatePost,
+  like,
+  unlike,
+  togglelike,
+  toggleunlike,
   deletePost,
   isAuthor,
   attachPostById
@@ -22,6 +26,10 @@ router.get("/by/:userId", getUserPosts);
 router.get("/:postId", getSinglePost);
 router.get("/photo/:postId", postPhoto);
 router.post("/:userId", isAuth, createPost, createPostValidation);
+router.put("/like/:postId", isAuth, like);
+router.put("/togglelike/:postId", isAuth, togglelike);
+router.put("/unlike/:postId", isAuth, unlike);
+router.put("/toggleunlike/:postId", isAuth, toggleunlike);
 router.put("/:postId", isAuth, isAuthor, updatePost);
 router.delete("/:postId", isAuth, isAuthor, deletePost);
 

@@ -6,6 +6,8 @@ const postSchema = new Schema({
   photo: { data: Buffer, contentType: String },
   customPhoto: { type: Boolean, default: false },
   author: { type: Schema.Types.ObjectId, ref: "User" },
+  likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  unlikes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   created: { type: Date, default: Date.now }
 });
 

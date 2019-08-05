@@ -1,4 +1,9 @@
-import { GET_POSTS, GET_POST, GET_USER_POSTS } from "../constants";
+import {
+  GET_POSTS,
+  GET_POST,
+  GET_USER_POSTS,
+  CHANGE_LIKES
+} from "../constants";
 
 const initialState = {
   posts: null,
@@ -16,6 +21,16 @@ export default (state = initialState, action) => {
 
     case GET_USER_POSTS:
       return { ...state, userPosts: action.payload };
+
+    case CHANGE_LIKES:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          likes: action.payload.likes,
+          unlikes: action.payload.unlikes
+        }
+      };
 
     default:
       return state;

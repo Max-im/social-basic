@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
-import { getSinglePost } from "../../store/actions/posts";
+import { getSinglePost, onDeletePost } from "../../store/actions/posts";
 import defaultImg from "../../assets/post.png";
+import PostLikes from "./PostLikes";
 
 export class SinglePost extends Component {
   componentDidMount() {
@@ -11,10 +12,16 @@ export class SinglePost extends Component {
     this.props.getSinglePost(postId);
   }
 
+  deletePost(id) {
+    if (!window.confirm("Are you sure?")) return;
+    this.props.onDeletePost(id, this.props.history);
+  }
+
   static propTypes = {
     posts: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
-    getSinglePost: PropTypes.func.isRequired
+    getSinglePost: PropTypes.func.isRequired,
+    onDeletePost: PropTypes.func.isRequired
   };
 
   render() {
@@ -48,13 +55,26 @@ export class SinglePost extends Component {
                   <p>Updated - {new Date(post.updated).toDateString()}</p>
                 )}
                 {isAuth && post.author && user._id === post.author._id && (
-                  <Link
-                    className="btn btn-warning btn-raised"
-                    to={`/posts/edit/${post._id}`}
-                  >
-                    Edit Post
-                  </Link>
+                  <>
+                    <Link
+                      className="btn btn-warning btn-raised"
+                      to={`/posts/edit/${post._id}`}
+                    >
+                      Edit Post
+                    </Link>
+                    <button
+                      className="btn btn-danger btn-raised"
+                      onClick={this.deletePost.bind(this, post._id)}
+                    >
+                      Delete
+                    </button>
+                  </>
                 )}
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-12">
+                <PostLikes />
               </div>
             </div>
           </div>
@@ -71,5 +91,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getSinglePost }
+  { getSinglePost, onDeletePost }
 )(withRouter(SinglePost));

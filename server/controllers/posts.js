@@ -30,7 +30,7 @@ exports.postPhoto = (req, res, next) => {
 
 exports.getSinglePost = (req, res) => {
   Post.findOne({ _id: req.post._id })
-    .select("_id title body customPhoto author created updated")
+    .select("_id title body customPhoto author created updated likes unlikes")
     .populate("author")
     .then(post => res.json(post))
     .catch(error => res.status(400).json(error));
@@ -102,6 +102,46 @@ exports.updatePost = (req, res) => {
       .then(() => res.end())
       .catch(err => res.status(400).json(err));
   });
+};
+
+exports.like = (req, res) => {
+  Post.findOneAndUpdate(
+    { _id: req.post._id },
+    { $push: { likes: req.body.userId } },
+    { new: true }
+  )
+    .then(post => res.json({ likes: post.likes, unlikes: post.unlikes }))
+    .catch(err => res.status(400).json(err));
+};
+
+exports.togglelike = (req, res) => {
+  Post.findOneAndUpdate(
+    { _id: req.post._id },
+    { $pull: { likes: req.body.userId } },
+    { new: true }
+  )
+    .then(post => res.json({ likes: post.likes, unlikes: post.unlikes }))
+    .catch(err => res.status(400).json(err));
+};
+
+exports.unlike = (req, res) => {
+  Post.findOneAndUpdate(
+    { _id: req.post._id },
+    { $push: { unlikes: req.body.userId } },
+    { new: true }
+  )
+    .then(post => res.json({ likes: post.likes, unlikes: post.unlikes }))
+    .catch(err => res.status(400).json(err));
+};
+
+exports.toggleunlike = (req, res) => {
+  Post.findOneAndUpdate(
+    { _id: req.post._id },
+    { $pull: { unlikes: req.body.userId } },
+    { new: true }
+  )
+    .then(post => res.json({ likes: post.likes, unlikes: post.unlikes }))
+    .catch(err => res.status(400).json(err));
 };
 
 exports.deletePost = (req, res) => {
